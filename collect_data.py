@@ -45,35 +45,27 @@ def get_river_flow_data():
 
 
 def get_sindh_barage_data():
-	url = "http://www.wapda.gov.pk/index.php/hydroreservior-in-pakistan?tmpl=component&id=43"
-	table = get_html_table(url)
-	caps = ['Time', 'Station', 'Today', 'Last Year', 'Avg 5 year', 'Avg 10 year']
-	table_data = table[0].find_all('tr')
-	time = table_data[1].text
-	time_arr = time.split(" ")
-	date = time_arr[1]
-	print(date)
-	sindh_data = table_data[25:28]
-	out = 'Sindh_barage.xlsx'
-	df = pd.read_excel(out)
-	final_data = []
-	for row in sindh_data:
-		row_data = row.find_all('td')
-		sub_data = [date]
-		for cell in row_data:
-			entry = cell.text
-			sub_data.append(entry)
-		print(sub_data)
-		final_data.append(sub_data)
-	print('df before append ........')
-	print(df)
-	df2 = pd.DataFrame(final_data, columns=caps)
-	print(df2)
-	df = df.append(df2, ignore_index=True)
-	df['Time'] = pd.to_datetime(df['Time'])
-	print(df)
-	df = df.drop_duplicates()
-	df.to_excel(out, index=False)
+url = "http://www.wapda.gov.pk/index.php/hydroreservior-in-pakistan?tmpl=component&id=43"
+table = get_html_table(url)
+caps = ['Time', 'Station', 'Today', 'Last Year', 'Avg 5 year', 'Avg 10 year']
+table_data = table[0].find_all('tr')
+time = table_data[1].text
+time_arr = time.split(" ")
+date = time_arr[1]
+print(date)
+sindh_data = table_data[25:28]
+final_data = []
+for row in sindh_data:
+row_data = row.find_all('td')
+sub_data = [date]
+for cell in row_data:
+entry = cell.text
+sub_data.append(entry)
+print(sub_data)
+final_data.append(sub_data)
+df2 = pd.DataFrame(final_data, columns=caps)
+out = 'https://github.com/haris021/Indus-Tool/edit/main/Sindh_barage.xlsx'
+df2.to_excel(out)
 
 
 get_river_flow_data()
